@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Income Tax Calculator</title>
+    <script>
+        function calculateTax() {
+            let income = parseFloat(document.getElementById("income").value);
+            let tax = 0;
+            
+            if (income <= 1200000) {
+                document.getElementById("result").innerText = "Income Tax: ₹0 (Nil)";
+                return;
+            }
+            
+            let slabs = [
+                { limit: 400000, rate: 0.00 },
+                { limit: 800000, rate: 0.05 },
+                { limit: 1200000, rate: 0.10 },
+                { limit: 1600000, rate: 0.15 },
+                { limit: 2000000, rate: 0.20 },
+                { limit: 2400000, rate: 0.25 },
+                { limit: Infinity, rate: 0.30 }
+            ];
+            
+            let prevLimit = 0;
+            for (let i = 0; i < slabs.length; i++) {
+                if (income > slabs[i].limit) {
+                    tax += (slabs[i].limit - prevLimit) * slabs[i].rate;
+                    prevLimit = slabs[i].limit;
+                } else {
+                    tax += (income - prevLimit) * slabs[i].rate;
+                    break;
+                }
+            }
+            
+            document.getElementById("result").innerText = "Income Tax: ₹" + tax.toFixed(2);
+        }
+    </script>
+</head>
+<body>
+    <h2>Income Tax Calculator</h2>
+    <label for="income">Enter Annual Income (₹): </label>
+    <input type="number" id="income" required>
+    <button onclick="calculateTax()">Calculate Tax</button>
+    <p id="result"></p>
+</body>
+</html>
